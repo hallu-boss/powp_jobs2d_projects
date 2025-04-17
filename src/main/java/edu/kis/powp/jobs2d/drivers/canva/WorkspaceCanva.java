@@ -1,16 +1,11 @@
 package edu.kis.powp.jobs2d.drivers.canva;
 
-import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.jobs2d.Job2dDriver;
-import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.canva.shapes.CanvaShape;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
 
 
 public class WorkspaceCanva implements Job2dDriver {
     private final Job2dDriver innerDriver;
-
-    private final Job2dDriver borderDriver;
 
     private int currentX,  currentY;
     private CanvaShape bound;
@@ -19,8 +14,10 @@ public class WorkspaceCanva implements Job2dDriver {
     public WorkspaceCanva(Job2dDriver innerDriver, CanvaShape bound) {
         this.innerDriver = innerDriver;
         this.bound = bound;
+    }
 
-        this.borderDriver = new LineDriverAdapter(DrawerFeature.getDrawerController(), LineFactory.getDottedLine(), "border");
+    public CanvaShape getBound() {
+        return bound;
     }
 
     @Override
@@ -38,11 +35,6 @@ public class WorkspaceCanva implements Job2dDriver {
          currentY = clipped[1];
         innerDriver.operateTo(currentX,  currentY);
     }
-
-    public void drawWorkspaceBoundary() {
-        bound.draw(borderDriver);
-    }
-
 
     private int[] clipPointToBounds(int x, int y) {
         if (bound.contains(x, y)) {
